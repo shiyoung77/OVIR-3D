@@ -21,4 +21,16 @@ varieties. Instead, this work views this problem as a 3D fusion problem from lan
 
 
 # Code
-Cleanning now. Coming soon (Expected Oct. 2023)
+Cleanning now. Coming in Oct. 2023.
+
+# Bibtex
+```
+@inproceedings{
+lu2023ovird,
+title={{OVIR}-3D: Open-Vocabulary 3D Instance Retrieval Without Training on 3D Data},
+author={Shiyang Lu and Haonan Chang and Eric Pu Jing and Abdeslam Boularias and Kostas Bekris},
+booktitle={7th Annual Conference on Robot Learning},
+year={2023},
+url={https://openreview.net/forum?id=gVBvtRqU1_}
+}
+```
