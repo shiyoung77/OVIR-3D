@@ -5,7 +5,7 @@ Shiyang Lu, Haonan Chang, Eric Jing, Yu Wu, Abdeslam Boularias, Kostas Bekris
 
 To appear at [CoRL'23](https://www.corl2023.org/). Also to be presented as an extended abstract at [OpenSUN3D (ICCV-W)](https://opensun3d.github.io/).\
 [[Full Paper (8-page)](https://openreview.net/pdf?id=gVBvtRqU1_)][[CoRL Poster]()]\
-[[Extended Abstract (4-page)](https://github.com/shiyoung77/OVIR-3D/blob/main/ovir3d-iccvw.pdf)][[ICCV-W Poster]()]
+[[Extended Abstract (4-page)](https://github.com/shiyoung77/OVIR-3D/blob/main/ovir3d_iccvw_extended_abstract.pdf)][[ICCV-W Poster](https://github.com/shiyoung77/OVIR-3D/blob/main/ovir3d_iccvw_poster.pdf)]
 
 # Intro
 Recent progress on open-vocabulary (language-driven, without a predefined set of categories) 3D segmentation addresses the problem mainly at the semantic level (by mid-2023). Nevertheless, robotic applications, such as manipulation and navigation, often require 3D object geometries at the instance level. This work provides a straightforward yet effective solution for open-vocabulary 3D instance retrieval, which returns a ranked set of 3D instance segments given a 3D point cloud reconstructed from an RGB-D video and a language query.
