@@ -1,0 +1,6 @@
+[submodule "Detic"]
+	path = Detic
+	url = git@github.com:shiyoung77/Detic.git
+[submodule "KinectFusion-python"]
+	path = KinectFusion-python
+	url = git@github.com:shiyoung77/KinectFusion-python.git
