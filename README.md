@@ -98,13 +98,14 @@ For **ScanNet200** dataset, please follow the instructions on their [website](ht
         {video_name}.txt
         {video_name}_clean_2.ply
 ```
-You need the following files for ScanNet200 evalution, they are included in this repo for your convenience.
+You need the following files for ScanNet200 preprocessing/evalution, they are included in this repo for your convenience.
 ```
+scannet_preprocess.py
 scannet200_constants.py
 scannet200_splits.py
 scannetv2-labels.combined.tsv
 scannet200_instance_gt/
-    val/
+    validation/
         {video_name}.txt
         ...
 ```
