@@ -42,6 +42,9 @@ mkdir models
 wget https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth -O models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth
 ```
 
+### Demo
+A preprossed sample scene from YCB-Video dataset could be downloaded [here](https://drive.google.com/file/d/1HqEUVIb1fNpjnaJH1VegylscRz3qRLEI/view?usp=sharing) (~1.3G). Extract it in this repo and then run `./demo.sh`.
+
 ### Dataset Preparation
 For **CUSTOM** dataset, make your RGB-D video data in the following format. We have opensourced our [video recording scripts](https://github.com/shiyoung77/realsense-video-capture) for realsense cameras and [KinectFusion implementation](https://github.com/shiyoung77/KinectFusion-python) in Python to help you record and reconstruct your custom 3D scene.
 ```
@@ -100,7 +103,7 @@ For **ScanNet200** dataset, please follow the instructions on their [website](ht
 ```
 You need the following files for ScanNet200 preprocessing/evalution, they are included in this repo for your convenience.
 ```
-scannet_preprocess.py
+scannet_preprocess.py  # copy files, resize images, and generate config.json
 scannet200_constants.py
 scannet200_splits.py
 scannetv2-labels.combined.tsv

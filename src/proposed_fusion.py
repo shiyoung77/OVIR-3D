@@ -591,7 +591,7 @@ def main():
         vocabs = importlib.import_module("src.vocabs").vocabs['lvis']
         vocab_features = torch.from_numpy(np.load(git_repo / args.vocab_feature_file)).to(args.device)
         if args.vis:
-            vis_selected_indices(scene_pcd, ground_indices)
+            vis_pcd(scene_pcd)
     print(f"{scene_pcd_path = }")
 
     instance_pt_count, instance_features, instance_detections = instance_fusion(
