@@ -585,7 +585,13 @@ def main():
         vocab_features = torch.from_numpy(np.load(git_repo / args.vocab_feature_file)).to(args.device)
         ground_indices = None
     else:  # custom data
-        scene_pcd_path = glob.glob(str(video_path / "scan-*.pcd"))[0]
+        scene_files = glob.glob(str(video_path / "*.pcd")) + glob.glob(str(video_path / "*.ply"))
+        if scene_files:
+            scene_pcd_path = scene_files[0]
+            if len(scene_files) > 1:
+                print(f"Found multiple scene files in {video_path}, using {scene_pcd_path}")
+        else:
+            print(f"Cannot find scene file in {video_path}, scene file should be either .pcd or .ply")
         scene_pcd = o3d.io.read_point_cloud(str(scene_pcd_path))
         ground_indices = None
         vocabs = importlib.import_module("src.vocabs").vocabs['lvis']

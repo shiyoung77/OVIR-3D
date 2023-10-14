@@ -118,14 +118,23 @@ You can visualize the ground truth annotation via `visualize_{scannet200/ycb_vid
 ### Text-aligned 2D Region Proposal Generation
 This works adopts Detic as a backbone 2D region proposal network. This repo contains a modified copy of the original repo as a submodule. To generate region proposals, `cd Detic`, change the dataset path in `file.py` and then run `python fire.py`. This script supports multi-gpu to inference multiple videos in parallel. By default, this scripts query all the categories in `imagenet21k` with confidence threshold at 0.3. The output masks and text-aligned features for each frame are stored in the `{dataset_path}/{video_name}/detic_output` folder. You can also save the 2D visualization using the `--save_vis` option, but this will make inference much slower.
 
+```
+cd Detic
+python fire.py --dataset {dataset_path}
+```
 
 ### 2D-to-3D Fusion
 Once 2D region proposals are generated, you can fuse the results for the 3D scan using the proposed algorithm. The implementation of this algorithm is in `src/proposed_fusion.py`. Again, there is a script `src/fire.py` that supports parallel fusion for multiple 3D scenes if you have multiple gpus. The output is stored in `{dataset_path}/{video_name}/detic_output/{vocab}/predictions` folder. It is recommended to have at least 11GB memory (e.g. 2080Ti) to run this algorithm, otherwise you may run into memory issues for large scenes.
 
-### Inference
-Once fusion is done, you will be able to interactively query 3D instances via `src/instance_query.py`.
 ```
-python src/instance_query.py -d {dataset_path} -v {video_name} --prediction_file {output_filename}
+cd src
+python fire.py --dataset {dataset_path}
+```
+
+### Inference
+Once fusion is done, you will be able to interactively query 3D instances via `src/instance_query.py`. Here `out_filename` is the file outputed from last step, the default is `proposed_fusion_detic_iou-0.25_recall-0.50_feature-0.75_interval-300.pkl`.
+```
+python src/instance_query.py -d {dataset_path} -v {video_name} --prediction_file {out_filename}
 ```
 
 

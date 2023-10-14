@@ -39,6 +39,7 @@ def proposed_fusion(dataset, video, idx, args):
             --size_thresh "{args.size_thresh}" \
             --device "cuda:{device}" \
             --output_file "{output_file}" \
+            --stride "{args.stride}" \
             --vocab_feature_file "src/scannet200.npy" \
             --no-sam \
             --tqdm \
@@ -61,6 +62,7 @@ def main():
     parser.add_argument("--visibility_thresh", type=float, default=0.2)
     parser.add_argument("--feature_similarity_thresh", type=float, default=0.75)
     parser.add_argument("--size_thresh", type=int, default=50)
+    parser.add_argument("--stride", type=int, default=10)
     parser.add_argument("--num_gpus", type=int, default=-1, help="Number of GPUs to use, -1 for all")
     args = parser.parse_args()
 
