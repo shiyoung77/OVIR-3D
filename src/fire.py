@@ -70,10 +70,10 @@ def main():
         max_workers = min(torch.cuda.device_count(), args.num_gpus)
 
     dataset = Path(args.dataset).expanduser()
-    if "ScanNet" in args.dataset:
-        videos = [i.name for i in sorted(dataset.iterdir())]
-    else:
+    if "ycb_video" in args.dataset:
         videos = [f"{i:04d}" for i in range(48, 60)]
+    else:
+        videos = [i.name for i in sorted(dataset.iterdir())]
 
     print(f"{dataset = }")
     print(f"{len(videos) = }")

@@ -20,6 +20,27 @@ varieties. Instead, this work views this problem as a 3D fusion problem from lan
 
 
 ## Usage
+### Download the repo
+```
+git clone git@github.com:shiyoung77/OVIR-3D.git --recurse-submodules
+```
+
+### Install Dependencies
+```
+conda create -n ovir3d python=3.10
+conda activate ovir3d
+
+# install pytorch
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# install other dependencies
+pip install -r requirements.txt
+
+# Download Detic pretrained model
+cd Detic
+mkdir models
+wget https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth -O models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth
+```
 
 ### Dataset Preparation
 For **CUSTOM** dataset, make your RGB-D video data in the following format. We have opensourced our [video recording scripts](https://github.com/shiyoung77/realsense-video-capture) for realsense cameras and [KinectFusion implementation](https://github.com/shiyoung77/KinectFusion-python) in Python to help you record and reconstruct your custom 3D scene.
@@ -102,7 +123,7 @@ Once 2D region proposals are generated, you can fuse the results for the 3D scan
 ### Inference
 Once fusion is done, you will be able to interactively query 3D instances via `src/instance_query.py`.
 ```
-python src/instance_query.py --d {dataset_path} --v {video_name} --prediction_file {output_filename}
+python src/instance_query.py -d {dataset_path} -v {video_name} --prediction_file {output_filename}
 ```
 
 
