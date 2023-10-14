@@ -1,4 +1,5 @@
 import sys
+import glob
 import importlib
 import copy
 import pickle
@@ -141,9 +142,8 @@ def main():
     # parser.add_argument("-d", "--dataset", type=str, default="~/t7/ycb_video")
     # parser.add_argument("-v", "--video", type=str, default="0048")
     parser.add_argument("--detic_exp", type=str, default="imagenet21k-0.3")
-    # parser.add_argument("--prediction_file",
-    #                     default="proposed_fusion_detic_iou-0.25_recall-0.50_feature-0.75_interval-300.pkl")
-    parser.add_argument("--prediction_file", default="panoptic_fusion_with_crf.pkl")
+    parser.add_argument("--prediction_file",
+                        default="proposed_fusion_detic_iou-0.25_recall-0.50_feature-0.75_interval-300.pkl")
     parser.add_argument("--vocabs", default="lvis")
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
@@ -157,17 +157,12 @@ def main():
     if "ScanNet" in args.dataset:
         video_path = dataset / "aligned_scans" / args.video
         scene_pcd_path = video_path / f"{args.video}_vh_clean_2.ply"
-    elif "custom_room" in args.dataset:
-        video_path = dataset / args.video
-        scene_pcd_path = video_path / f"scan-0.020.pcd"
-    elif "custom_tabletop" in args.dataset:
-        video_path = dataset / args.video
-        scene_pcd_path = video_path / f"scan-0.005.pcd"
     elif "ycb_video" in args.dataset:
         video_path = dataset / args.video
         scene_pcd_path = video_path / f"scan-0.005.pcd"
-    else:
-        raise NotImplementedError(f"{args.dataset} not implemented")
+    else:  # custom data
+        video_path = dataset / args.video
+        scene_pcd_path = glob.glob(str(video_path / "scan-*.pcd"))[0]
 
     clip_model, _ = clip.load('ViT-B/32', args.device)
     vocabs = importlib.import_module("src.vocabs").vocabs[args.vocabs]

@@ -4,6 +4,7 @@ import pickle
 import sys
 import copy
 import json
+import glob
 import argparse
 import operator
 from time import perf_counter
@@ -221,26 +222,17 @@ def merge_instances(instance_pt_count, instance_features, instance_detections, c
     return merged_instance_pt_count, merged_features, merged_detections
 
 
-@njit
-def resolve_overlapping_masks(pred_masks, pred_scores, score_thresh=0.5):
+def resolve_overlapping_masks(pred_masks, pred_scores, score_thresh=0.5, device="cuda:0"):
     M, H, W = pred_masks.shape
-    panoptic_mask = np.zeros((H, W), dtype=np.uint8)
-    panoptic_masks = np.zeros((M, H, W), dtype=np.bool_)
-    for i in range(H):
-        for j in range(W):
-            best_score = np.NINF
-            best_mask_idx = -1
-            for m in range(M):
-                if pred_masks[m, i, j] and pred_scores[m] > best_score:
-                    best_score = pred_scores[m]
-                    best_mask_idx = m
-                # if prediction score is high enough, keep the mask
-                if pred_masks[m, i, j] and pred_scores[m] > score_thresh:
-                    panoptic_masks[m, i, j] = True
-            if best_score > 0:
-                panoptic_masks[best_mask_idx, i, j] = True
-                panoptic_mask[i, j] = best_mask_idx + 1
-    return panoptic_masks, panoptic_mask
+    pred_masks = torch.from_numpy(pred_masks).to(device)
+    panoptic_masks = torch.clone(pred_masks)
+    scores = torch.from_numpy(pred_scores)[:, None, None].repeat(1, H, W).to(device)
+    scores[~pred_masks] = 0
+    indices = ((scores == torch.max(scores, dim=0, keepdim=True).values) & pred_masks).nonzero()
+    panoptic_masks = torch.zeros((M, H, W), dtype=torch.bool, device=device)
+    panoptic_masks[indices[:, 0], indices[:, 1], indices[:, 2]] = True
+    panoptic_masks[scores > score_thresh] = True  # if prediction score is high enough, keep the mask anyway
+    return panoptic_masks.detach().cpu().numpy()
 
 
 def instance_fusion(video_path, detic_exp, scene_pcd, iou_thresh=0.3, recall_thresh=0.5, feature_similarity_thresh=0.75,
@@ -286,9 +278,7 @@ def instance_fusion(video_path, detic_exp, scene_pcd, iou_thresh=0.3, recall_thr
         # pred_classes = detic_output.pred_classes.numpy()  # (M,)
         # sam_qualities = detic_output.sam_qualities
 
-        pred_masks, pred_mask_vis = resolve_overlapping_masks(pred_masks, pred_scores)
-        # plt.imshow(pred_mask_vis)
-        # plt.show()
+        pred_masks = resolve_overlapping_masks(pred_masks, pred_scores, device=device)
 
         cam_pose = np.loadtxt(video_path / 'poses' / f"{frame_id}-pose.txt")
         pcd = copy.deepcopy(scene_pcd).transform(np.linalg.inv(cam_pose))
@@ -594,26 +584,15 @@ def main():
         vocabs = importlib.import_module("src.vocabs").vocabs['lvis']
         vocab_features = torch.from_numpy(np.load(git_repo / args.vocab_feature_file)).to(args.device)
         ground_indices = None
-    elif "custom" in args.dataset:
-        if "room" in args.dataset:
-            scene_pcd_path = video_path / "scan-0.020.ply"
-            scene_pcd = o3d.io.read_point_cloud(str(scene_pcd_path))
-            ground_indices = get_ground_indices(scene_pcd, thresh=0.025)
-            ground_indices = torch.from_numpy(ground_indices).to(args.device)
-        elif "tabletop" in args.dataset:
-            scene_pcd_path = video_path / 'scan-0.005.pcd'
-            scene_pcd = o3d.io.read_point_cloud(str(scene_pcd_path))
-            ground_indices = None
-            # ground_mask = np.asarray(scene_pcd.points)[:, 2] < 0.01
-            # ground_indices = np.nonzero(ground_mask)[0]
-        else:
-            raise NotImplementedError(f"Unknown dataset: {args.dataset}")
-        if args.vis:
-            vis_selected_indices(scene_pcd, ground_indices)
+    else:  # custom data
+        scene_pcd_path = glob.glob(str(video_path / "scan-*.pcd"))[0]
+        scene_pcd = o3d.io.read_point_cloud(str(scene_pcd_path))
+        ground_indices = None
         vocabs = importlib.import_module("src.vocabs").vocabs['lvis']
         vocab_features = torch.from_numpy(np.load(git_repo / args.vocab_feature_file)).to(args.device)
-    else:
-        raise NotImplementedError(f"Unknown dataset: {args.dataset}")
+        if args.vis:
+            vis_selected_indices(scene_pcd, ground_indices)
+    print(f"{scene_pcd_path = }")
 
     instance_pt_count, instance_features, instance_detections = instance_fusion(
         video_path, args.detic_exp, scene_pcd,

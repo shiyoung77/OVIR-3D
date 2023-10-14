@@ -113,9 +113,7 @@ You can visualize the ground truth annotation via `visualize_{scannet200/ycb_vid
 
 
 ### Text-aligned 2D Region Proposal Generation
-This works adopts Detic as a backbone 2D region proposal network. This repo contains a modified copy of the original repo as a submodule. Please follow its own README to install required python packages. Download the pretrained [model](https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth), and put it in `Detic/models` folder.
-
-`cd Detic`, change the dataset path in `file.py` and then run `python fire.py`. This script supports multi-gpu to inference multiple videos in parallel. By default, this scripts query all the categories in `imagenet21k` with confidence threshold at 0.3. The output masks and text-aligned features for each frame are stored in the `{dataset_path}/{video_name}/detic_output` folder. You can also save the 2D visualization using the `--save_vis` option, but this will make inference much slower.
+This works adopts Detic as a backbone 2D region proposal network. This repo contains a modified copy of the original repo as a submodule. To generate region proposals, `cd Detic`, change the dataset path in `file.py` and then run `python fire.py`. This script supports multi-gpu to inference multiple videos in parallel. By default, this scripts query all the categories in `imagenet21k` with confidence threshold at 0.3. The output masks and text-aligned features for each frame are stored in the `{dataset_path}/{video_name}/detic_output` folder. You can also save the 2D visualization using the `--save_vis` option, but this will make inference much slower.
 
 
 ### 2D-to-3D Fusion

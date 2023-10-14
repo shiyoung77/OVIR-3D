@@ -41,7 +41,7 @@ def proposed_fusion(dataset, video, idx, args):
             --output_file "{output_file}" \
             --vocab_feature_file "src/scannet200.npy" \
             --no-sam \
-            --no-tqdm \
+            --tqdm \
             --no-vis \
     """
     subprocess.run(command, shell=True)
