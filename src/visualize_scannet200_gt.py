@@ -51,7 +51,7 @@ def main():
     git_repo = Path(git.Repo(search_parent_directories=True).working_tree_dir)
     sys.path.append(str(git_repo))
 
-    scannet200 = importlib.import_module("eval.scannet200_constants")
+    scannet200 = importlib.import_module("scannet_related_scripts.scannet200_constants")
     SCANNET_COLOR_MAP_200 = scannet200.SCANNET_COLOR_MAP_200
     CLASS_LABELS = scannet200.CLASS_LABELS_200
     VALID_CLASS_IDS = scannet200.VALID_CLASS_IDS_200
@@ -68,7 +68,7 @@ def main():
     print(f"{len(scene_pcd.points) = }")
     vis_pcd(scene_pcd)
 
-    gt_path = dataset / "processed_scans" / "instance_gt" / args.mode / f"{args.video}.txt"
+    gt_path = git_repo / "scannet_related_scripts" / "scannet200_instance_gt" / args.mode / f"{args.video}.txt"
     instance_ids = np.array(gt_path.read_text().splitlines()).astype(int)
     num_pts = len(instance_ids)
     instance_labels = instance_ids // 1000
