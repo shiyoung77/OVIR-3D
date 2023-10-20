@@ -48,11 +48,10 @@ def main():
     mode = "val"
 
     scans = []
-    with open(os.path.join(scannet_git_repo, f"/Tasks/Benchmark/scannetv2_{mode}.txt"), 'r') as fp:
+    with open(os.path.join(scannet_git_repo, f"Tasks/Benchmark/scannetv2_{mode}.txt"), 'r') as fp:
         line = fp.readline().strip()
         while line:
-            if not line.endswith("00"):
-                scans.append(line)
+            scans.append(line)
             line = fp.readline().strip()
 
     for i, scan in enumerate(scans):
