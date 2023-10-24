@@ -55,9 +55,10 @@ def main():
     parser.add_argument("--dataset", type=str, default="~/t7/ScanNet/aligned_scans")
     # parser.add_argument("--dataset", type=str, default="~/t7/ycb_video")
     parser.add_argument("--detic_exp", default="imagenet21k-0.3")
+    parser.add_argument("--video", type=str, default="")
     parser.add_argument("--iou_thresh", type=float, default=0.25)
     parser.add_argument("--recall_thresh", type=float, default=0.5)
-    parser.add_argument("--depth_thresh", type=float, default=0.04)
+    parser.add_argument("--depth_thresh", type=float, default=0.1)
     parser.add_argument("--interval", type=int, default=300)
     parser.add_argument("--visibility_thresh", type=float, default=0.2)
     parser.add_argument("--feature_similarity_thresh", type=float, default=0.75)
@@ -76,6 +77,8 @@ def main():
         videos = [f"{i:04d}" for i in range(48, 60)]
     else:
         videos = [i.name for i in sorted(dataset.iterdir())]
+    if args.video:
+        videos = [args.video]
 
     print(f"{dataset = }")
     print(f"{len(videos) = }")

@@ -171,9 +171,21 @@ def filter_pt_by_visibility_count(instance_pt_count, visibility_count, visibilit
     return instance_pt_count
 
 
-def filter_by_instance_size(instance_pt_count, size_thresh=50):
-    mask = instance_pt_count.to(torch.bool).sum(1) > size_thresh
-    keep_indices = torch.nonzero(mask)[:, 0]
+def filter_by_instance_size(instance_pt_count, instance_detections, size_thresh=50):
+    # filter by size threshold
+    sizes = instance_pt_count.to(torch.bool).sum(1)
+    mask = sizes > size_thresh
+
+    # filter by median mask size, IMPORTANT!
+    median_mask_sizes = []
+    for i in range(len(instance_detections)):
+        instance_detection = instance_detections[i]
+        median_mask_sizes.append(np.median([detection[2] for detection in instance_detection]))
+    median_mask_sizes = torch.tensor(median_mask_sizes, device=mask.device)
+    mask2 = sizes > median_mask_sizes
+
+    final_mask = mask & mask2
+    keep_indices = torch.nonzero(final_mask)[:, 0]
     return keep_indices
 
 
@@ -277,6 +289,8 @@ def instance_fusion(video_path, detic_exp, scene_pcd, iou_thresh=0.3, recall_thr
         pred_features = F.normalize(pred_features, dim=1, p=2)
         # pred_classes = detic_output.pred_classes.numpy()  # (M,)
         # sam_qualities = detic_output.sam_qualities
+        if pred_scores.shape[0] == 0:
+            continue
 
         pred_masks = resolve_overlapping_masks(pred_masks, pred_scores, device=device)
 
@@ -341,7 +355,7 @@ def instance_fusion(video_path, detic_exp, scene_pcd, iou_thresh=0.3, recall_thr
             tic = perf_counter()
             filter_pt_by_visibility_count(instance_pt_count[:num_instances], visibility_count,
                                           visibility_thresh=visibility_thresh, inplace=True)
-            keep_indices = filter_by_instance_size(instance_pt_count[:num_instances], size_thresh=size_thresh)
+            keep_indices = filter_by_instance_size(instance_pt_count[:num_instances], instance_detections, size_thresh=size_thresh)
             instance_pt_count[:len(keep_indices)] = instance_pt_count[:num_instances][keep_indices]
             instance_pt_count[len(keep_indices):] = 0
             instance_features[:len(keep_indices)] = instance_features[:num_instances][keep_indices]
