@@ -1,4 +1,5 @@
 # OVIR-3D
+<span style="color:red">Please do NOT download at this moment! Something seems to be wrong with the repo. I'm trying to figure it out and will fix it ASAP. </span>
 
 **OVIR-3D: Open-Vocabulary 3D Instance Retrieval Without Training on 3D Data**.\
 Shiyang Lu, Haonan Chang, Eric Jing, Yu Wu, Abdeslam Boularias, Kostas Bekris
