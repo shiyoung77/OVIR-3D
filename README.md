@@ -1,6 +1,6 @@
 # OVIR-3D
 > [!WARNING]
->Please do NOT download at this moment! Something seems to be wrong with the repo. I'm trying to figure it out and will fix it ASAP.
+>For those who cloned this repo before Oct 25, 2023, please update the repo by running `git pull` and `git submodule update --init --recursive`. We fixed a major bug that caused very bad segmentation for ScanNet200. We reran the results for ScanNet200 and the result files could be found at [here](https://drive.google.com/file/d/1_4cATwib3UyNax5iRgI1mW524ignx9_5/view?usp=sharing). Sorry for the inconvenience.
 
 **OVIR-3D: Open-Vocabulary 3D Instance Retrieval Without Training on 3D Data**.\
 Shiyang Lu, Haonan Chang, Eric Jing, Yu Wu, Abdeslam Boularias, Kostas Bekris
