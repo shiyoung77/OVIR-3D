@@ -161,4 +161,5 @@ cython_debug/
 
 
 demo_dataset/
-custom_dataset/
+scannet_related_scripts/scannet200_instance_gt/validation/
+results/
