@@ -1,6 +1,6 @@
 # OVIR-3D
 > [!WARNING]
->For those who cloned this repo before Oct 25, 2023, please update the repo by running `git pull` and `git submodule update --init --recursive`. We fixed a major bug that caused very bad segmentation for ScanNet200. We reran the results for ScanNet200 and the result files could be found at [here](https://drive.google.com/file/d/1_4cATwib3UyNax5iRgI1mW524ignx9_5/view?usp=sharing). Sorry for the inconvenience.
+>For those who cloned this repo before Oct 25, 2023, please update the repo by running `git pull` and `git submodule update --init --recursive`. We fixed a major bug that caused very bad segmentation for ScanNet200. We reran the results for ScanNet200 and the prediction files could be found at [here](https://drive.google.com/file/d/1_4cATwib3UyNax5iRgI1mW524ignx9_5/view?usp=sharing). Sorry for the inconvenience.
 
 **OVIR-3D: Open-Vocabulary 3D Instance Retrieval Without Training on 3D Data**.\
 Shiyang Lu, Haonan Chang, Eric Jing, Yu Wu, Abdeslam Boularias, Kostas Bekris
@@ -139,12 +139,29 @@ Once fusion is done, you will be able to interactively query 3D instances via `s
 python src/instance_query.py -d {dataset_path} -v {video_name} --prediction_file {out_filename}
 ```
 
+## Additional Comments
+You may wonder why we call it instance retrieval instead of instance segmentation. The reason is that we formulate this problem as an information retrieval problem, i.e. given a query, retrieve relevant documents (ranked instances) from a database (a 3D scene). The proposed method first tries to find all 3D instances in a scene (without knowing the testing categories), and then rank them based on the language query using CLIP feature similarity. This is also how we [evaluate](https://github.com/shiyoung77/OVIR-3D/blob/main/src/eval_instance_retrieval_scannet200.py) our method and baselines, i.e. [Standard mAP for information retrieval](https://stackoverflow.com/a/40834813). We believe that it is a more reasonable metric given our open-vocabulary problem setting, though it is slightly different from the mAP metric commonly used for closed-set instance segmentation, where each predicted instance has to be assiged with a category label and a confidence score. Nevertheless, if you use OVIR-3D as a baseline, feel free to use any metric you like on the [prediction files](https://drive.google.com/file/d/1_4cATwib3UyNax5iRgI1mW524ignx9_5/view?usp=sharing) that we provided for ScanNet200, which contains all 3D instance segments (likely more than what ScanNet200 annotated) and their corresponding CLIP features.
+
+## Applications
+We have a follow-up work [Context-Aware Entity Grounding with Open-Vocabulary 3D Scene Graphs (OVSG)](https://ovsg-l.github.io/), which will also appear at [CoRL'23](https://www.corl2023.org/). It uses OVIR-3D as backbone method to get all 3D instances in a scene, and then build a 3D scene graph for more precise object retrieval using natural language by considering object relationships. Please take a look if you are interested.
+
 
 # Bibtex
+For OVIR-3D:
 ```
 @inproceedings{lu2023ovir,
   title={OVIR-3D: Open-Vocabulary 3D Instance Retrieval Without Training on 3D Data},
   author={Lu, Shiyang and Chang, Haonan and Jing, Eric Pu and Boularias, Abdeslam and Bekris, Kostas},
+  booktitle={7th Annual Conference on Robot Learning},
+  year={2023}
+}
+```
+
+For OVSG:
+```
+@inproceedings{chang2023context,
+  title={Context-Aware Entity Grounding with Open-Vocabulary 3D Scene Graphs},
+  author={Chang, Haonan and Boyalakuntla, Kowndinya and Lu, Shiyang and Cai, Siwei and Jing, Eric Pu and Keskar, Shreesh and Geng, Shijie and Abbas, Adeeb and Zhou, Lifeng and Bekris, Kostas and others},
   booktitle={7th Annual Conference on Robot Learning},
   year={2023}
 }
