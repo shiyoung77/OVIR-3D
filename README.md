@@ -1,11 +1,14 @@
 # OVIR-3D
+> [!IMPORTANT]
+> We will be presenting our poster at [CoRL'23](https://www.corl2023.org) on Wednesday, Nov. 8. from 5:15 - 6:00 pm in [session 4](https://www.corl2023.org/papers#:~:text=Poster%204%3A%20LLM/VLM/HRI). Hope to see you in person!
+
 > [!WARNING]
 >For those who cloned this repo before Oct 25, 2023, please update the repo by running `git pull` and `git submodule update --init --recursive`. We fixed a major bug that caused very bad segmentation for ScanNet200. We reran the results for ScanNet200 and the prediction files could be found at [here](https://drive.google.com/file/d/1_4cATwib3UyNax5iRgI1mW524ignx9_5/view?usp=sharing). Sorry for the inconvenience.
 
 **OVIR-3D: Open-Vocabulary 3D Instance Retrieval Without Training on 3D Data**.\
 Shiyang Lu, Haonan Chang, Eric Jing, Yu Wu, Abdeslam Boularias, Kostas Bekris
 
-To appear at [CoRL'23](https://www.corl2023.org/). Also to be presented as an extended abstract at [OpenSUN3D (ICCV-W)](https://opensun3d.github.io/).\
+To appear at [CoRL'23](https://www.corl2023.org/). Also presented as an extended abstract at [OpenSUN3D (ICCV-W)](https://opensun3d.github.io/).\
 [[Full Paper (8-page)](https://openreview.net/pdf?id=gVBvtRqU1_)][[Extended Abstract (4-page)](https://github.com/shiyoung77/OVIR-3D/blob/main/ovir3d_iccvw_extended_abstract.pdf)][[ICCV-W Poster](https://github.com/shiyoung77/OVIR-3D/blob/main/ovir3d_iccvw_poster.pdf)]
 
 ## Intro

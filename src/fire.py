@@ -55,15 +55,16 @@ def main():
     parser.add_argument("--dataset", type=str, default="~/t7/ScanNet/aligned_scans")
     # parser.add_argument("--dataset", type=str, default="~/t7/ycb_video")
     parser.add_argument("--detic_exp", default="imagenet21k-0.3")
-    parser.add_argument("--video", type=str, default="")
-    parser.add_argument("--iou_thresh", type=float, default=0.25)
-    parser.add_argument("--recall_thresh", type=float, default=0.5)
-    parser.add_argument("--depth_thresh", type=float, default=0.1)
-    parser.add_argument("--interval", type=int, default=300)
-    parser.add_argument("--visibility_thresh", type=float, default=0.2)
-    parser.add_argument("--feature_similarity_thresh", type=float, default=0.75)
-    parser.add_argument("--size_thresh", type=int, default=50)
-    parser.add_argument("--stride", type=int, default=1)
+    parser.add_argument("-v", "--video", type=str, default="", help="if empty, process all videos in the dataset")
+    parser.add_argument("--iou_thresh", type=float, default=0.25, help="for instance matching")
+    parser.add_argument("--recall_thresh", type=float, default=0.5, help="for instance merging")
+    parser.add_argument("--depth_thresh", type=float, default=0.1, help="Used to determine the visibility of points"
+                        "if abs(measured_depth - projected depth) < depth_thresh, then the point is visible")
+    parser.add_argument("--interval", type=int, default=300, help="interval between frames for periodic filtering")
+    parser.add_argument("--visibility_thresh", type=float, default=0.2, help="for point filtering")
+    parser.add_argument("--feature_similarity_thresh", type=float, default=0.75, help="for instance matching")
+    parser.add_argument("--size_thresh", type=int, default=50, help="minimal size of a valid instance")
+    parser.add_argument("--stride", type=int, default=1, help="stride for frame sampling")
     parser.add_argument("--num_gpus", type=int, default=-1, help="Number of GPUs to use, -1 for all")
     args = parser.parse_args()
 
@@ -74,6 +75,7 @@ def main():
 
     dataset = Path(args.dataset).expanduser()
     if "ycb_video" in args.dataset:
+        args.depth_thresh = 0.04  # better depth/reconstruction quality so this threshold can be smaller
         videos = [f"{i:04d}" for i in range(48, 60)]
     else:
         videos = [i.name for i in sorted(dataset.iterdir())]
